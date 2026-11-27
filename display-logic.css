@@ -1,0 +1,143 @@
+/* ==========================================================
+   Display Logic popup — standalone copy from studio-ui-corrections
+   (studio.html tokens + form.css popup styles)
+   ========================================================== */
+:root {
+  --primary: #C84C0E;
+  --primary-tint: #FBEEE8;
+  --heading: #0B4B66;
+  --text: #363636;
+  --text-muted: #707070;
+  --border: #D6D5D4;
+  --divider: #E5E5E5;
+  --page-bg: #EEEEEE;
+  --surface: #FFFFFF;
+  --radius-btn: 4px;
+  --headingM: 20px; --bodyS: 14px; --bodyXS: 12px;
+  --buttonM: 16px; --buttonS: 14px;
+  --lh-heading: 1.14;
+  --lh-body: 1.37;
+  --focus-ring: 0 0 0 3px #fff, 0 0 0 5px var(--primary);
+}
+@media (min-width: 600px) { :root { --headingM: 22px; --bodyS: 16px; --bodyXS: 14px; } }
+@media (min-width: 1024px) { :root { --headingM: 24px; } }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Roboto, system-ui, sans-serif; color: var(--text); background: var(--page-bg); }
+button { font-family: inherit; cursor: pointer; }
+svg { flex-shrink: 0; }
+
+/* ---------- Demo page ---------- */
+.page { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.page-title { font-size: var(--headingM); line-height: var(--lh-heading); font-weight: 700; color: var(--heading); }
+.page-desc { font-size: var(--bodyS); line-height: var(--lh-body); color: var(--text-muted); }
+.demo-box { background: var(--surface); border-radius: 8px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+
+/* ---------- Buttons (h = 32) ---------- */
+.btn { height: 32px; padding: 0 16px; border-radius: var(--radius-btn);
+       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+       font-size: var(--buttonS); font-weight: 700; line-height: 1; white-space: nowrap; }
+.btn-secondary { background: var(--surface); color: var(--primary); border: 1px solid var(--primary); }
+.btn-secondary:hover { background: var(--primary-tint); color: #A33E0B; border-color: #A33E0B; }
+.btn-primary { background: var(--primary); color: #fff; border: 1px solid var(--primary); }
+.btn-primary:hover { background: #A63E0B; }
+.btn:focus-visible { outline: 2px solid var(--heading); outline-offset: 2px; }
+.icon-btn { width: 32px; height: 32px; border: 0; border-radius: var(--radius-btn); background: none; color: var(--text);
+            display: grid; place-items: center; }
+.icon-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+button[aria-label^="Close"]:hover { background: transparent !important; }
+
+/* ---------- Modal ---------- */
+.modal { position: fixed; inset: 0; margin: auto; border: 0; border-radius: 12px; padding: 0;
+         width: min(550px, calc(100vw - 32px)); max-height: calc(100vh - 48px);
+         box-shadow: 0 12px 40px rgba(0,0,0,.18); color: var(--text); background: var(--surface); }
+.modal::backdrop { background: rgba(20,20,20,.45); }
+
+/* ---------- Inputs ---------- */
+.pf-input { width: 100%; height: 40px; padding: 8px 12px; border: 1px solid #505A5F; border-radius: var(--radius-btn);
+            background: var(--surface); font: inherit; font-size: 16px; color: var(--text); }
+.pf-input:hover { border-color: #0B0C0C; }
+.pf-input:focus-visible { outline: none; border-color: var(--primary); box-shadow: var(--focus-ring); }
+.pf-select { appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+             background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4z' fill='%23505A5F'/%3E%3C/svg%3E") right 14px center / 12px no-repeat; }
+.fp-error { color: #B91900; font-size: var(--bodyXS); line-height: var(--lh-body); }
+.fp-error:empty { display: none; }
+.rc-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #505A5F; display: grid; place-items: center; flex: none; }
+
+/* ---------- Tooltip ---------- */
+.tip { position: relative; display: inline-flex; }
+.tip-btn { width: 24px; height: 24px; border: 0; background: none; color: inherit; display: grid; place-items: center; border-radius: 50%; }
+.tip-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.tip-bubble { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); width: 240px; padding: 8px 10px;
+              border-radius: 4px; background: #363636; color: #fff; font-size: 12px; font-weight: 400; line-height: 1.4;
+              visibility: hidden; opacity: 0; transition: opacity .15s; z-index: 5; }
+.tip:hover .tip-bubble, .tip-btn:focus-visible + .tip-bubble { visibility: visible; opacity: 1; }
+
+/* ---------- Display Logic card (Dependent Field) ---------- */
+.dl-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+.dl-title { display: flex; align-items: center; gap: 4px; font-size: 16px; line-height: var(--lh-heading); font-weight: 700; color: #707070; }
+.dl-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.dl-item { display: flex; align-items: center; gap: 4px; min-height: 40px; padding: 4px 4px 4px 12px; background: #FAFAFA;
+           border: 1px solid var(--border); border-radius: 8px; }
+.dl-entry { display: flex; flex-direction: column; gap: 8px; }
+/* "Or" between logic rows — same pill as the popup's "And" */
+.dl-or { align-self: center; padding: 4px 14px; border-radius: 4px; background: #EAF2FC; color: #0057BD; font-size: 14px; font-weight: 700; }
+.dl-name { flex: 1; min-width: 0; font-size: 14px; color: #363636; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dl-btn { width: 32px; height: 32px; border: 0; border-radius: var(--radius-btn); background: none; color: var(--primary); display: grid; place-items: center; flex: none; }
+.dl-btn:hover { background: var(--primary-tint); }
+.dl-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.dl-add { width: 100%; height: 32px; }
+
+/* ======================================================
+   Display Logic popup (Figma: App configuration – Display Logic, 570 wide)
+   ====================================================== */
+.modal.dlg-logic { width: min(570px, calc(100vw - 32px)); border-radius: 8px; }
+.modal.dlg-logic[open] { display: flex; flex-direction: column; }
+.dlg-logic form { display: flex; flex-direction: column; min-height: 0; max-height: calc(100vh - 48px); }
+.lg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 12px 12px 20px; }
+.lg-title { display: flex; align-items: center; gap: 8px; font-size: 18px; line-height: var(--lh-heading); font-weight: 700; color: var(--heading); }
+.lg-ico { display: grid; place-items: center; color: var(--primary); }
+.lg-body { flex: 1; min-height: 0; overflow-y: auto; padding: 0 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+.lg-body > * { flex: none; }
+/* one grey box per condition */
+.lg-cond { background: #FAFAFA; border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.lg-cond-head { display: flex; align-items: center; justify-content: space-between; }
+.lg-if { font-size: 16px; font-weight: 700; color: var(--text); }
+.lg-del { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 6px; border: 0; background: none; border-radius: var(--radius-btn);
+          font: inherit; font-size: 14px; font-weight: 500; color: #A33E0B; }
+.lg-del:hover { background: var(--primary-tint); }
+.lg-del:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.lg-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.lg-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lg-narrow { width: calc(50% - 8px); }
+.lg-label { font-size: 14px; line-height: var(--lh-body); color: #363636; }
+.lg-select.is-ph { color: #707070; }
+.lg-cond .pf-input { height: 40px; }
+.lg-cond input::placeholder { color: #707070; }
+.lg-cond [aria-invalid="true"] { border-color: #B91900; }
+/* Enter Value | Use Another Field */
+.lg-modes { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lg-mode { position: relative; display: flex; align-items: flex-start; gap: 8px; padding: 12px; background: #fff; border: 1px solid var(--border);
+           border-radius: 4px; cursor: pointer; }
+.lg-mode input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.lg-mode.is-on { border-color: var(--primary); }
+.lg-mode.is-on .rc-dot { border-color: var(--primary); }
+.lg-mode.is-on .rc-dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+.lg-mode:has(input:focus-visible) { box-shadow: var(--focus-ring); }
+.lg-mode strong { display: block; font-size: 14px; color: var(--text); }
+.lg-mode small { display: block; margin-top: 2px; font-size: 12px; line-height: 1.4; color: #707070; }
+@media (max-width: 560px) { .lg-two, .lg-modes { grid-template-columns: 1fr; } .lg-narrow { width: 100%; } }
+/* "And" between condition boxes */
+.lg-and { align-self: center; padding: 4px 14px; border-radius: 4px; background: #EAF2FC; color: #0057BD; font-size: 14px; font-weight: 700; }
+.lg-add { align-self: flex-start; height: 32px; padding: 0 12px; }
+/* Summary (screenshot): divider, each "If" row in a rounded box, pill tags, yellow "And" */
+.lg-summary { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; padding-top: 16px; border-top: 1px solid var(--border); }
+.lg-sum-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; font-size: 16px; line-height: 1.37; color: var(--heading); }
+.lg-sum-box { padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+.lg-and-s { align-self: center; padding: 4px 16px; border-radius: 16px; background: #FFF9DB; color: #8A5A00; font-size: 16px; font-weight: 400; }
+.lg-tag { display: inline-flex; align-items: center; min-height: 28px; padding: 2px 14px; border-radius: 16px; background: #DCEEFF; color: var(--heading); font-weight: 700; font-size: 16px; }
+.lg-then .lg-tag { border-radius: 4px; background: #EEF6FF; }
+.lg-foot { display: flex; justify-content: flex-end; gap: 16px; padding: 12px 20px 16px; border-top: 1px solid var(--divider); }
+.lg-foot .btn { height: 32px; min-width: 120px; font-size: var(--buttonS); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
